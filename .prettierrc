@@ -1,0 +1,28 @@
+{
+	"semi": false,
+	"singleQuote": true,
+	"useTabs": true,
+	"tabWidth": 2,
+	"printWidth": 90,
+	"bracketSpacing": true,
+	"bracketSameLine": false,
+	"arrowParens": "avoid",
+	"endOfLine": "lf",
+	"plugins": ["prettier-plugin-sql"],
+	"overrides": [
+		{
+			"files": ["*.psql", "*.sql"],
+			"options": {
+				"formatter": "sql-formatter",
+				"parser": "sql",
+				"language": "postgresql",
+				"trailingComma": "none",
+				"keywordCase": "preserve",
+				"dataTypeCase": "preserve",
+				"functionCase": "preserve",
+				"identifierCase": "preserve",
+				"indentStyle": "standard"
+			}
+		}
+	]
+}
