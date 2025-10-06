@@ -22,7 +22,7 @@ export const generateImage = async (f: any) => {
 	const imagePart: Part = {
 		inlineData: {
 			data: image,
-			mimeType: f.mimetype,
+			mimeType: 'image/png',
 		},
 	}
 	const response = await ai.models.generateContent({
