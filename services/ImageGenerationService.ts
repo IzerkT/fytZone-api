@@ -33,18 +33,13 @@ export const generateImage = async (f: any) => {
 		},
 	})
 
-	console.log('Generation response:', response)
-
 	const candidates = response.candidates
 	if (candidates && candidates[0]?.content?.parts) {
 		for (const part of candidates[0].content.parts) {
-			if (part.text) {
-				console.log(part.text)
-			} else if (part.inlineData) {
+			if (part.inlineData) {
 				const imageData = part.inlineData.data
 				if (typeof imageData === 'string') {
 					const buffer = Buffer.from(imageData, 'base64')
-					FsUtils.save('public/gemini-native-image.png', buffer)
 					return buffer
 				}
 				console.warn('No image data found in inlineData.')
