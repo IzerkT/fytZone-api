@@ -9,6 +9,7 @@ import * as FsUtils from './utils/FsUtils'
 
 // Routers
 import ImageGenerationRouter from './routes/v1/image-generation'
+import ContactRouter from './routes/v1/contact'
 
 // Error Middleware
 import ErrorMd from './middleware/error'
@@ -32,10 +33,12 @@ function start() {
 	app.use(limiter)
 
 	// set express options
-	app.use(express.urlencoded({ extended: true }))
+	app.use(express.json()) // Parse JSON bodies
+	app.use(express.urlencoded({ extended: true })) // Parse URL-encoded bodies
 
 	// register routers
 	app.use('/api/v1/image-generation', ImageGenerationRouter)
+	app.use('/api/v1/contact', ContactRouter)
 
 	// serve public folder
 	app.use('/api/v1/public', express.static(FsUtils.path('public')))
