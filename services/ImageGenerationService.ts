@@ -51,30 +51,18 @@ const getPromptForActivity = (activity: string) => {
 	return prompts[activity as keyof typeof prompts] || prompts.Bodybuilding
 }
 
-export const generateImage = async (f: any, selectedActivity: string) => {
-	const image = FsUtils.toBase64(f.buffer)
+export const generateImage = async (file: any, activity: string) => {
+	const b64 = file.buffer.toString('base64')
+	const prompt = getPromptForActivity(activity)
 
-	if (!image) {
-		throw new Error('Image file is required')
-	}
-
-	const prompt = getPromptForActivity(selectedActivity)
-
-	const imagePart: Part = {
-		inlineData: {
-			data: image,
-			mimeType: 'image/png',
-		},
-	}
 	const response = await ai.models.generateContent({
 		model: 'gemini-2.5-flash-image',
-		contents: [imagePart, prompt],
-		config: {
-			responseModalities: ['IMAGE', 'TEXT'],
-		},
+		contents: [{ inlineData: { data: b64, mimeType: file.mimetype } }, prompt],
+		config: { responseModalities: ['IMAGE', 'TEXT'] },
 	})
 
 	const candidates = response.candidates
+
 	if (candidates && candidates[0]?.content?.parts) {
 		for (const part of candidates[0].content.parts) {
 			if (part.inlineData) {
@@ -83,10 +71,7 @@ export const generateImage = async (f: any, selectedActivity: string) => {
 					const buffer = Buffer.from(imageData, 'base64')
 					return buffer
 				}
-				console.warn('No image data found in inlineData.')
 			}
 		}
-	} else {
-		console.warn('No candidates or parts found in response.')
 	}
 }
