@@ -53,6 +53,7 @@ const getPromptForActivity = (activity: string) => {
 
 export const generateImage = async (file: any, activity: string) => {
 	if (!file.buffer) {
+		console.log('No file buffer found:', file)
 		throw new Error('No file found')
 	}
 
@@ -62,6 +63,7 @@ export const generateImage = async (file: any, activity: string) => {
 		.toBuffer()
 
 	if (!buffer) {
+		console.log('No buffer after processing with sharp')
 		throw new Error('Error processing image')
 	}
 
