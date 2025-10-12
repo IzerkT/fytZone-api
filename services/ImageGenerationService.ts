@@ -52,10 +52,18 @@ const getPromptForActivity = (activity: string) => {
 }
 
 export const generateImage = async (file: any, activity: string) => {
+	if (!file.buffer) {
+		throw new Error('No file found')
+	}
+
 	const buffer = await sharp(file.buffer)
 		.resize({ width: 1024, height: 1024, fit: 'inside' })
 		.toFormat('jpeg')
 		.toBuffer()
+
+	if (!buffer) {
+		throw new Error('Error processing image')
+	}
 
 	const b64 = buffer.toString('base64')
 	const prompt = getPromptForActivity(activity)
