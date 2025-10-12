@@ -1,6 +1,6 @@
-import { GoogleGenAI, Part } from '@google/genai'
+import { GoogleGenAI } from '@google/genai'
 
-import * as FsUtils from '../utils/FsUtils'
+import sharp from 'sharp'
 
 const ai = new GoogleGenAI({
 	apiKey: process.env.GOOGLE_API_KEY || '',
@@ -52,7 +52,12 @@ const getPromptForActivity = (activity: string) => {
 }
 
 export const generateImage = async (file: any, activity: string) => {
-	const b64 = file.buffer.toString('base64')
+	const buffer = await sharp(file.buffer)
+		.resize({ width: 1024, height: 1024, fit: 'inside' })
+		.toFormat('jpeg')
+		.toBuffer()
+
+	const b64 = buffer.toString('base64')
 	const prompt = getPromptForActivity(activity)
 
 	const response = await ai.models.generateContent({
